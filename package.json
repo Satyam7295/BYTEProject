@@ -2,9 +2,11 @@
   "name": "myreadme",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/index.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node src/server.js",
+    "cli": "node src/index.js",
+    "dev": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +15,9 @@
   "description": "",
   "dependencies": {
     "axios": "^1.12.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "google-auth-library": "^10.3.0"
   }
 }

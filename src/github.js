@@ -15,23 +15,32 @@ export async function fetchRepoMetadata(repoUrl) {
     const match = repoUrl.match(/github\.com\/([^/]+)\/([^/]+)(?:\.git)?/);
 
     if (!match) {
-      throw new Error("❌ Invalid GitHub repository URL.");
+      const e = new Error("❌ Invalid GitHub repository URL.");
+      e.status = 400;
+      throw e;
     }
 
     const owner = match[1];
     const repo = match[2];
 
+    const headers = {
+      "User-Agent": "MyReadme-Generator",
+      Accept: "application/vnd.github+json",
+    };
+    if (process.env.GITHUB_TOKEN) {
+      headers.Authorization = `token ${process.env.GITHUB_TOKEN}`;
+    }
+
     const response = await axios.get(`${GITHUB_API_BASE}/${owner}/${repo}`, {
-      headers: {
-        Authorization: `token ${process.env.GITHUB_TOKEN}`,
-        "User-Agent": "MyReadme-Generator",
-      },
+      headers,
     });
 
     return response.data;
   } catch (error) {
-    throw new Error(
-      `⚠️ Failed to fetch repository metadata: ${error.response?.data?.message || error.message}`
-    );
+    const status = error.response?.status || 502; // default to Bad Gateway for upstream errors
+    const msg = error.response?.data?.message || error.message;
+    const e = new Error(`⚠️ Failed to fetch repository metadata${status ? ` (HTTP ${status})` : ""}: ${msg}`);
+    e.status = status;
+    throw e;
   }
 }
