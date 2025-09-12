@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeSanitize from 'rehype-sanitize';
 import { toast } from 'react-toastify';
 
-const GITHUB_URL_REGEX = /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+(\/)?$/i;
+const GITHUB_URL_REGEX = /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+(?:\.git)?(\/)?$/i;
 
 export default function ReadmeGenerator() {
   const [repoUrl, setRepoUrl] = useState('');
@@ -39,10 +39,12 @@ export default function ReadmeGenerator() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
+      const urlToSend = /^https?:\/\//i.test(repoUrl) ? repoUrl : `https://${repoUrl}`;
+
       const res = await fetch('/api/generate-readme', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ repoUrl }),
+        body: JSON.stringify({ repoUrl: urlToSend }),
         signal: controller.signal,
       });
 
