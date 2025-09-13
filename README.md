@@ -65,19 +65,21 @@ pgsql
 Copy code
 MyReadme/
 ├── backend/
-│   ├── index.js        # Express server
-│   ├── github.js       # GitHub API helper
-│   ├── gemini.js       # Gemini API helper
+│   ├── index.js              # Express server
+│   ├── github.js             # GitHub API helper
+│   ├── gemini.js             # Gemini API helper
 ├── frontend/
 │   ├── src/
 │   │   ├── App.jsx
-│   │   ├── components/ReadmeGenerator.jsx
+│   │   ├── components/
+│   │   │   └── ReadmeGenerator.jsx
 │   │   └── main.jsx
 ├── screenshots/
 │   ├── before.png
 │   └── after.png
 ├── package.json
 └── README.md
+
 📜 License
 This project is licensed under the MIT License.
 
